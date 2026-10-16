@@ -164,6 +164,8 @@ A solução é serializar as transações numa fila; veja
 
 ---
 
+> **Limites da fila em `exemplos/src/transacao.js`:** ela é global ao módulo (não por conexão); chamar `transacao()` dentro de outra `transacao()` trava para sempre; e toda escrita precisa passar pela fila, porque um `db.run()` fora dela, durante uma transação aberta, entra nessa transação e some se ela der `ROLLBACK`.
+
 ## 12. Autenticação por token (Bearer)
 
 Como o HTTP é *stateless* (cada requisição é independente), o cliente precisa provar
