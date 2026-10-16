@@ -1,0 +1,16 @@
+{
+  "name": "exemplos-estudo",
+  "version": "1.0.0",
+  "description": "Exemplos executáveis do material de estudo",
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  },
+  "private": true
+}
