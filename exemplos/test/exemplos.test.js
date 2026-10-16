@@ -44,7 +44,9 @@ test('CONCEITOS §11: BEGIN concorrente na mesma conexão corrompe a transação
   };
   const res = await Promise.all([ingenua(1, 50), ingenua(2, 10)]);
   assert.deepStrictEqual(res, ['erro', 'erro']);
-  assert.deepStrictEqual(await db.all('SELECT id FROM livros'), []);
+  // O que sobra no banco depende da ordem em que o driver executa os comandos
+  // (o INSERT de 1 pode cair fora da transação e persistir); só 2 nunca grava.
+  assert.ok(!(await db.all('SELECT id FROM livros')).some((r) => r.id === 2));
   await db.close();
 });
 
