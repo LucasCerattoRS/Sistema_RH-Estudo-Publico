@@ -107,7 +107,7 @@ app.get('/oi', (req, res) => res.send('olá'));
 ## 8. SQLite e o driver usado (sqlite3 + sqlite — assíncrono)
 
 SQLite é um banco SQL completo que vive **num único arquivo** (`banco.sqlite`), sem
-servidor separado. Este projeto usa **duas** libs (confira `package.json:28–29`):
+servidor separado. Este material usa **duas** libs (veja `exemplos/package.json`):
 
 - `sqlite3` — o driver em si, com API de *callbacks*;
 - `sqlite` — um wrapper fino que converte tudo para **Promises**, permitindo
@@ -155,6 +155,13 @@ Transação agrupa vários comandos em um "tudo ou nada": `BEGIN` → comandos �
 (confirma) ou `ROLLBACK` (desfaz tudo). Evita estados pela metade (ex.: baixar o saldo
 sem gravar o histórico).
 
+**Cuidado com conexão única compartilhada:** se duas requisições fizerem `BEGIN` ao
+mesmo tempo na mesma conexão, o segundo `BEGIN` falha, o `ROLLBACK` do tratamento de
+erro desfaz a transação da *outra* e o `COMMIT` dela também falha — nada é gravado.
+A solução é serializar as transações numa fila; veja
+[`exemplos/src/transacao.js`](exemplos/src/transacao.js) e os testes em
+[`exemplos/test/`](exemplos/test/exemplos.test.js).
+
 ---
 
 ## 12. Autenticação por token (Bearer)
@@ -183,7 +190,18 @@ expiração, identificando quem é quem a cada requisição.
 
 Comparar strings com `===` retorna mais rápido quando o primeiro caractere já difere.
 Medindo tempos, um atacante paciente descobre a senha caractere a caractere.
-`crypto.timingSafeEqual` compara **sempre no mesmo tempo**.
+`crypto.timingSafeEqual` compara **sempre no mesmo tempo** — mas **lança erro**
+(`ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH`) se os dois buffers têm tamanhos diferentes,
+e o que o usuário digitou raramente tem o tamanho certo: sem tratamento, uma senha
+errada de outro comprimento vira `500` em vez de "credencial inválida". A saída é
+aplicar um hash (SHA-256) aos dois lados antes de comparar:
+
+```js
+const { igualSeguro } = require('./src/comparar'); // exemplos/src/comparar.js
+igualSeguro('1234', '12345'); // false, sem lançar
+```
+
+Código executável e teste em [`exemplos/`](exemplos/).
 
 ---
 

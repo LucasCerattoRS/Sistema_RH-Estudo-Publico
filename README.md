@@ -34,10 +34,10 @@ específico.
 
 ## Estado
 
-Só documentação (Markdown + diagramas Mermaid): não há código para rodar nem
-testes. Os exemplos de código dentro dos `.md` são ilustrativos. Para "rodar",
-basta abrir os arquivos aqui no GitHub (que já desenha os diagramas Mermaid) ou
-em qualquer editor com prévia de Markdown.
+Documentação (Markdown + diagramas Mermaid) e uma pasta [`exemplos/`](exemplos/)
+com código executável e testes (`cd exemplos && npm ci && npm test`, Node 22),
+rodados no CI (`.github/workflows/ci.yml`). Cobrem apenas CONCEITOS §11 e §13; os
+demais trechos de código dos `.md` continuam ilustrativos.
 
 ## Para estudar
 
@@ -54,8 +54,9 @@ Exercícios que ligam os textos a bugs que aparecem de verdade nesse tipo de app
 
 ## Pendências
 
-- Nenhum exemplo é executável; um mini-projeto de exemplo com `npm test` seria
-  o próximo passo natural, se fizer sentido.
+- Só dois conceitos têm exemplo executável; os outros trechos ainda não são testados.
+- Os `.md` ainda trazem resquícios do sistema de origem (ex.: `/api/epis`, "C.A.",
+  `cas_oficiais`, `ALLOWED_COLS`, parênteses vazios no GLOSSARIO) a generalizar.
 
 ## Licença
 
