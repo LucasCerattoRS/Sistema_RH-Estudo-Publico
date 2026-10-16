@@ -157,7 +157,9 @@ sem gravar o histórico).
 
 **Cuidado com conexão única compartilhada:** se duas requisições fizerem `BEGIN` ao
 mesmo tempo na mesma conexão, o segundo `BEGIN` falha, o `ROLLBACK` do tratamento de
-erro desfaz a transação da *outra* e o `COMMIT` dela também falha — nada é gravado.
+erro desfaz a transação da *outra* e o `COMMIT` dela também falha — o resultado
+depende da ordem dos comandos (a escrita da outra pode até ficar gravada fora de
+transação), ou seja, sem atomicidade.
 A solução é serializar as transações numa fila; veja
 [`exemplos/src/transacao.js`](exemplos/src/transacao.js) e os testes em
 [`exemplos/test/`](exemplos/test/exemplos.test.js).
